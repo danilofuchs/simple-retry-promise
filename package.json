@@ -1,6 +1,6 @@
 {
   "name": "simple-retry-promises",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Retries a promise N times",
   "main": "build/index.js",
   "scripts": {
