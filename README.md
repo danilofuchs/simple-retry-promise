@@ -73,13 +73,13 @@ async function shouldRetryOn500() {
 
 ```
 
-A more realistic use case would be to retry every GET request to a given endpoint.
+A more realistic use case would be to retry every GET request to a given endpoint when 500 is received.
 
 ```typescript
 import axios, { AxiosResponse, AxiosError }  from "axios";
 import retryPromise from "simple-retry-promise";
 
-async function getWithRetryOn500<T>(url: string) {
+async function getWithRetryOn500<T = unknown>(url: string) {
     const response = await retryPromise<
             AxiosResponse<T>,
             AxiosError
