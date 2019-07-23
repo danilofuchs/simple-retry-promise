@@ -1,7 +1,8 @@
+import axios, { AxiosError } from "axios";
 import retryPromise from "../src";
 
 describe("Retry promise", () => {
-    it("Does not retry resolved promise", async () => {
+    it("should not retry resolved promise", async () => {
         await expect(
             retryPromise(
                 () => new Promise((resolve, reject) => resolve(true)),
@@ -13,7 +14,7 @@ describe("Retry promise", () => {
         ).resolves.toEqual(true);
     });
 
-    it("Should retry according to shouldRetry", async () => {
+    it("should retry according to shouldRetry", async () => {
         const promiseBuilder = jest.fn(
             () => new Promise<boolean>((resolve, reject) => reject(null))
         );
@@ -38,7 +39,7 @@ describe("Retry promise", () => {
         expect(promiseBuilder).toHaveBeenCalledTimes(3);
     });
 
-    it("Tries N times before rejecting", async () => {
+    it("should try N times before rejecting", async () => {
         const promiseBuilder = jest.fn(
             () => new Promise<boolean>((resolve, reject) => reject(null))
         );
@@ -52,7 +53,7 @@ describe("Retry promise", () => {
         expect(promiseBuilder).toHaveBeenCalledTimes(3);
     });
 
-    it("Tries only 2 times if resolved", async () => {
+    it("should try only 2 times if resolved", async () => {
         const promiseBuilder = jest.fn(
             (currentRetryId?: number) =>
                 new Promise<boolean>((resolve, reject) => {
@@ -70,5 +71,21 @@ describe("Retry promise", () => {
             })
         ).resolves.toEqual(true);
         expect(promiseBuilder).toHaveBeenCalledTimes(2);
+    });
+
+    it("Should retry on response 500", async () => {
+        const promiseBuilder = jest.fn(() =>
+            axios.get("https://httpbin.org/status/500")
+        );
+
+        await expect(
+            retryPromise<unknown, AxiosError>(promiseBuilder, {
+                maxTries: 3,
+                delay: 0,
+                shouldRetry: (err) =>
+                    err.response ? err.response.status === 500 : true,
+            })
+        ).rejects.toHaveProperty("response.status", 500);
+        expect(promiseBuilder).toHaveBeenCalledTimes(3);
     });
 });
