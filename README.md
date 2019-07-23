@@ -45,13 +45,13 @@ retryPromise<boolean, Error>(
 
 `simple-retry-promise` works perfectly with [axios](https://github.com/axios/axios).
 
-The following snippet retries the request everytime the endpoint returns status 500, for a maximum of 3 times, with a delay of 200ms between an error and the next request.
+The following snippet retries the request everytime the fake endpoint returns status 500, for a maximum of 3 times, with a delay of 200ms between an error and the next request.
 
 ```typescript
 import axios, { AxiosResponse, AxiosError }  from "axios";
 import retryPromise from "simple-retry-promise";
 
-async function fetchWithRetry() {
+async function shouldRetryOn500() {
     const response = await retryPromise<
             AxiosResponse<unknown>,
             AxiosError
@@ -67,6 +67,31 @@ async function fetchWithRetry() {
 
     // `response` will be of type `AxiosResponse<unknown>`
     // `response.data` will be of type `unknown`
+
+    return response.data;
+}
+
+```
+
+A more realistic use case would be to retry every GET request to a given endpoint.
+
+```typescript
+import axios, { AxiosResponse, AxiosError }  from "axios";
+import retryPromise from "simple-retry-promise";
+
+async function getWithRetryOn500<T>(url: string) {
+    const response = await retryPromise<
+            AxiosResponse<T>,
+            AxiosError
+        >(
+            () => axios.get<T>(url),
+            {
+                maxRetries: 3,
+                delay: 200,
+                shouldRetry: (err) =>
+                    err.response ? err.response.status === 500 : true,
+        }
+    );
 
     return response.data;
 }
