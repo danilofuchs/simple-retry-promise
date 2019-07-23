@@ -13,7 +13,7 @@ $    yarn add simple-retry-promise
 
 ## Example
 ```typescript
-import retryPromise from "simple-retry-promise";
+import retryPromise from "simple-retry-promises";
 
 retryPromise(
     () => new Promise((resolve, reject) => resolve(true)),
@@ -49,7 +49,7 @@ The following snippet retries the request everytime the fake endpoint returns st
 
 ```typescript
 import axios, { AxiosResponse, AxiosError }  from "axios";
-import retryPromise from "simple-retry-promise";
+import retryPromise from "simple-retry-promises";
 
 async function shouldRetryOn500() {
     const response = await retryPromise<
@@ -77,7 +77,7 @@ A more realistic use case would be to retry every GET request to a given endpoin
 
 ```typescript
 import axios, { AxiosResponse, AxiosError }  from "axios";
-import retryPromise from "simple-retry-promise";
+import retryPromise from "simple-retry-promises";
 
 async function getWithRetryOn500<T = unknown>(url: string) {
     const response = await retryPromise<

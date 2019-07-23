@@ -11,7 +11,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "incremental": true,
+    "incremental": false,
     "sourceMap": true,
     "declaration": true
   },

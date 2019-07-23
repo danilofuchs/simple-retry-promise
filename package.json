@@ -1,5 +1,5 @@
 {
-  "name": "simple-retry-promise",
+  "name": "simple-retry-promises",
   "version": "1.0.0",
   "description": "Retries a promise N times",
   "main": "build/index.js",
@@ -26,5 +26,21 @@
     "prettier": "^1.18.2",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
-  }
+  },
+  "directories": {
+    "test": "test",
+    "bin": "build"
+  },
+  "files": [
+    "build"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danilofuchs/simple-retry-promise.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danilofuchs/simple-retry-promise/issues"
+  },
+  "homepage": "https://github.com/danilofuchs/simple-retry-promise#readme"
 }
